@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Quản lý hồ sơ nhắc việc Telegram</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f2f5f9;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.container{
+
+    width:700px;
+    max-width:95%;
+
+    margin:40px auto;
+
+    background:#fff;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+    padding:30px;
+
+}
+
+h2{
+
+    margin-top:0;
+
+    text-align:center;
+
+    color:#006699;
+
+}
+
+label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:5px;
+
+    font-weight:bold;
+
+}
+
+select,input{
+
+    width:100%;
+
+    padding:10px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    font-size:15px;
+
+}
+
+button{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:12px;
+
+    font-size:16px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#0088cc;
+
+    color:#fff;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#006699;
+
+}
+
+#status{
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+}
+
+.success{
+
+    color:green;
+
+}
+
+.error{
+
+    color:red;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>THÊM HỒ SƠ NHẮC VIỆC TELEGRAM</h2>
+
+<label>Phòng chuyên môn</label>
+
+<select id="phong">
+
+<option value="">-- Chọn phòng chuyên môn --</option>
+
+<option>Văn phòng HĐND – UBND</option>
+
+<option>Phòng Kinh tế, Hạ tầng và Đô thị</option>
+
+<option>Phòng Văn hóa – Xã hội</option>
+
+<option>Trung tâm Phục vụ hành chính công</option>
+
+</select>
+
+<label>Hệ thống</label>
+
+<select id="heThong">
+
+<option value="">-- Chọn hệ thống --</option>
+
+<option>HTGQTTHC thành phố Đồng Nai</option>
+
+<option>HTGQTTHC Bộ Khoa học và Công nghệ</option>
+
+<option>HTGQTTHC Bộ Nội vụ</option>
+
+<option>HTGQTTHC Bộ Xây dựng</option>
+
+<option>HTGQTTHC Bộ Công thương</option>
+
+<option>HTGQTTHC Bộ Nông nghiệp và Môi trường</option>
+
+<option>HTGQTTHC Bộ Y tế</option>
+
+<option>HTGQTTHC Bộ Giáo dục và Đào tạo</option>
+
+<option>HTGQTTHC Bộ Dân tộc và Tôn giáo</option>
+
+<option>HTGQTTHC Bộ Tư pháp</option>
+
+<option>HTGQTTHC Bộ Ngoại giao</option>
+
+<option>HTGQTTHC Bộ Tài chính</option>
+
+<option>HTGQTTHC Bộ Văn hóa, Thể thao và Du lịch</option>
+
+</select>
+
+<label>Mã hồ sơ</label>
+
+<input
+id="mahoso"
+placeholder="Nhập mã hồ sơ">
+
+<label>Ngày nhận</label>
+
+<input
+id="ngaynhan"
+placeholder="Ví dụ: 22/07/2026 08:00">
+
+<label>Ngày hẹn trả</label>
+
+<input
+id="ngayhentra"
+placeholder="Ví dụ: 24/07/2026 17:00">
+
+<button onclick="saveData()">
+
+💾 Lưu hồ sơ
+
+</button>
+
+<div id="status"></div>
+
+</div>
+
+<script>
+
+const API="https://script.google.com/macros/s/AKfycbwiMP7MTBLTkfZSqsL7Ttwq2KC6e9X-HTA7PxWgL4LWjwust7IxPqmFeteeHfy2YTSthg/exec";
+
+async function saveData(){
+
+    const phong=document.getElementById("phong").value;
+
+    const heThong=document.getElementById("heThong").value;
+
+    const mahoso=document.getElementById("mahoso").value.trim();
+
+    const ngaynhan=document.getElementById("ngaynhan").value.trim();
+
+    const ngayhentra=document.getElementById("ngayhentra").value.trim();
+
+    if(phong==""){
+
+        return showError("Chưa chọn phòng chuyên môn");
+
+    }
+
+    if(heThong==""){
+
+        return showError("Chưa chọn hệ thống");
+
+    }
+
+    if(mahoso==""){
+
+        return showError("Chưa nhập mã hồ sơ");
+
+    }
+
+    if(ngaynhan==""){
+
+        return showError("Chưa nhập ngày nhận");
+
+    }
+
+    if(ngayhentra==""){
+
+        return showError("Chưa nhập ngày hẹn trả");
+
+    }
+
+    const form=new URLSearchParams();
+
+    form.append("phong",phong);
+
+    form.append("heThong",heThong);
+
+    form.append("mahoso",mahoso);
+
+    form.append("ngaynhan",ngaynhan);
+
+    form.append("ngayhentra",ngayhentra);
+
+    try{
+
+        const res=await fetch(API,{
+
+            method:"POST",
+
+            body:form
+
+        });
+
+        const json=await res.json();
+
+        if(json.ok){
+
+            document.getElementById("status").className="success";
+
+            document.getElementById("status").innerHTML="✅ Lưu thành công";
+
+            document.getElementById("mahoso").value="";
+
+            document.getElementById("ngaynhan").value="";
+
+            document.getElementById("ngayhentra").value="";
+
+            document.getElementById("mahoso").focus();
+
+        }else{
+
+            showError(json.error);
+
+        }
+
+    }catch(e){
+
+        showError(e);
+
+    }
+
+}
+
+function showError(msg){
+
+    document.getElementById("status").className="error";
+
+    document.getElementById("status").innerHTML="❌ "+msg;
+
+}
+
+</script>
+
+</body>
+
+</html>
